@@ -1,0 +1,6 @@
+a) Uma instância de uma classe.
+b) :
+c) Modular (acesso ao nível de módulo)
+d) val é imutável e var é mutável / val indica imutabilidade e var indicar mutabilidade
+e) Os atributos não são finais (os atributos podem ter valores diferenciados)
+f) Herança, Poliformismo e instância de classe
