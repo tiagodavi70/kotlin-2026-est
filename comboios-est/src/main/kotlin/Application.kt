@@ -1,6 +1,7 @@
 package pt.org
 
 import io.ktor.server.application.*
+import pt.org.comboio.roteamento.configureLinha
 import pt.org.comboio.roteamento.configureUtilizador
 
 fun main(args: Array<String>) {
@@ -16,4 +17,5 @@ fun Application.module() {
     configureRouting()
 
     configureUtilizador()
+    configureLinha()
 }
