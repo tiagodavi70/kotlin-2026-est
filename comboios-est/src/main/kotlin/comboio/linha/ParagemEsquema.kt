@@ -1,28 +1,26 @@
-package pt.org.comboio.linha
+package pt.transporte.comboio.linha
 
 import kotlinx.serialization.Serializable
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.Table
+import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.insert
+import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
-import pt.org.UserService.Users
+import org.jetbrains.exposed.sql.update
 import pt.org.comboio.Utils.DBUtils
 
-@Serializable
-data class ParagemExposed(
-    val id:Int,
-    val nome:String,
-    val estacao: Boolean = true
-)
+import pt.transporte.comboio.linha.RegiaoServico.Regiao
 
-//CREATE TABLE PARAGEM(
-//    id INTEGER autoincrement PRIMARY KEY,
-//    nome VARCHAR(50),
-//    estacao BOOL,
-//
-//    CONSTRAINT PRIMARY KEY id
-//);
+@Serializable
+data class ParagemExposed(val id: Int, val nome: String,
+                          val regiao: RegiaoExposed, val estacao: Boolean = true) {
+    init {
+        require(nome.length >= 3) { "Nome muito pequeno (< 3)" }
+    }
+}
 
 class ParagemServico(database: Database) {
 
@@ -30,6 +28,7 @@ class ParagemServico(database: Database) {
         val id = integer("id").autoIncrement()
         val nome = varchar("nome", 50)
         val estacao = bool("estacao")
+        val regiao = reference("regiaoId", Regiao.id)
 
         override val primaryKey = PrimaryKey(id)
     }
@@ -40,17 +39,60 @@ class ParagemServico(database: Database) {
         }
     }
 
-    // entrada
+    // funções de operação - atualizar e apagar
     suspend fun criar(paragem: ParagemExposed) {
         DBUtils.dbQuery {
             Paragem.insert {
                 it[nome] = paragem.nome
                 it[estacao] = paragem.estacao
+                it[regiao] = paragem.regiao.id
             }
         }
     }
 
+    suspend fun ler(): List<ParagemExposed> {
+        return DBUtils.dbQuery {
+            (Paragem innerJoin Regiao).selectAll()
+                .map {
+                    val regiaoJoin = RegiaoExposed(
+                        it[Regiao.id],
+                        it[Regiao.nome],
+                        it[Regiao.abreviatura]
+                    )
+                    ParagemExposed(it[Paragem.id], it[Paragem.nome],
+                        regiaoJoin,  it[Paragem.estacao] )
+                }
+        }
+    }
 
-    // saida
+    suspend fun ler(id: Int): ParagemExposed? {
+        return DBUtils.dbQuery {
+            (Paragem innerJoin Regiao).selectAll()
+                .where { Paragem.id eq id } // Paragem.id == id // EQUALS
+                .map {
+                    val regiao = RegiaoExposed(
+                        it[Regiao.id],
+                        it[Regiao.nome],
+                        it[Regiao.abreviatura]
+                    )
+                    ParagemExposed(it[Paragem.id], it[Paragem.nome],
+                        regiao,  it[Paragem.estacao] ) }
+                .singleOrNull()
+        }
+    }
 
+    suspend fun atualizar(id: Int, paragem: ParagemExposed) {
+        DBUtils.dbQuery {
+            Paragem.update({ Paragem.id eq id }) {
+                it[Paragem.nome] = paragem.nome
+                it[Paragem.estacao] = paragem.estacao
+            }
+        }
+    }
+
+    suspend fun apagar(id: Int) {
+        DBUtils.dbQuery {
+            Paragem.deleteWhere { Paragem.id eq id }
+        }
+    }
 }
