@@ -1,6 +1,7 @@
 package pt.org
 
 import io.ktor.server.application.*
+import pt.org.comboio.roteamento.configurePessoa
 import pt.org.comboio.roteamento.configureUtilizador
 import pt.transporte.comboio.roteamento.configureLinha
 
@@ -16,6 +17,7 @@ fun Application.module() {
     configureDatabases()
     configureRouting()
 
-    configureUtilizador()
+    //configureUtilizador()
+    configurePessoa()
     configureLinha()
 }
