@@ -1,4 +1,4 @@
-package pt.org.comboio.pessoa
+package pt.transporte.comboio.pessoa
 
 import kotlinx.serialization.Serializable
 import org.jetbrains.exposed.sql.Database
@@ -7,17 +7,17 @@ import org.jetbrains.exposed.sql.Table
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
-import pt.org.comboio.Utils.DBUtils.dbQuery
+import pt.transporte.comboio.utils.DButils.dbQuery
 
 @Serializable
-data class UtilizadorExposed(val nome: String, val nif: String) {
-//    init {
-//        require(nif.length == 9) { "Erro" }
-//    }
+data class PessoaExposed(val nome:String, val nif:String) {
+    init {
+        require(nif.length == 9 && nif.toIntOrNull() != null) { "NIF tem que ter 9 posições" }
+    }
 }
 
-class UtilizadorServico(database: Database) {
-    object Utilizador: Table() {
+class PessoaServico(database: Database) {
+    object Pessoa: Table() {
         val id = integer("id").autoIncrement()
         val nome = varchar("nome", 50)
         val nif = varchar("nif", 9)
@@ -25,23 +25,23 @@ class UtilizadorServico(database: Database) {
 
     init {
         transaction {
-            SchemaUtils.create(Utilizador)
+            SchemaUtils.create(Pessoa)
         }
     }
 
-    suspend fun criar(utilizador: UtilizadorExposed) {
+    suspend fun criar(utilizador: PessoaExposed) {
         dbQuery {
-            Utilizador.insert {
+            Pessoa.insert {
                 it[nome] = utilizador.nome
                 it[nif] = utilizador.nif
             }
         }
     }
 
-    suspend fun ler(): List<UtilizadorExposed> {
+    suspend fun ler(): List<PessoaExposed> {
         return dbQuery {
-            Utilizador.selectAll()
-                .map { UtilizadorExposed(it[Utilizador.nome], it[Utilizador.nif]) }
+            Pessoa.selectAll()
+                .map { PessoaExposed(it[Pessoa.nome], it[Pessoa.nif]) }
         }
     }
 }

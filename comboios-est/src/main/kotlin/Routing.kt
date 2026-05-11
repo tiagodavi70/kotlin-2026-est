@@ -1,4 +1,4 @@
-package pt.org
+package pt.transporte
 
 import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.*
@@ -19,7 +19,7 @@ fun Application.configureRouting() {
         get("/") {
             call.respondText("Olá mundo!")
         }
-        // Static plugin. Try to access `/static/index.html`
+
         staticResources("/", "static")
     }
 }

@@ -1,16 +1,15 @@
-package pt.org
+package pt.transporte
 
 import io.ktor.server.application.*
-import pt.org.comboio.roteamento.configurePessoa
-import pt.org.comboio.roteamento.configureUtilizador
 import pt.transporte.comboio.roteamento.configureLinha
+import pt.transporte.comboio.roteamento.configurePessoa
+import pt.transporte.comboio.roteamento.configureUtilizador
 
 fun main(args: Array<String>) {
     io.ktor.server.netty.EngineMain.main(args)
 }
 
 fun Application.module() {
-
     configureHTTP()
     configureTemplating()
     configureSerialization()
@@ -18,6 +17,6 @@ fun Application.module() {
     configureRouting()
 
     //configureUtilizador()
-    configurePessoa()
     configureLinha()
+    configurePessoa()
 }

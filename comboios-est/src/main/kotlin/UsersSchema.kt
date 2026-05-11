@@ -1,4 +1,4 @@
-package pt.org
+package pt.transporte
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.serialization.Serializable

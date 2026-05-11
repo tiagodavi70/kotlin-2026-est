@@ -1,21 +1,17 @@
 <!DOCTYPE html >
 <html xmlns:th="http://www.thymeleaf.org">
-    <head>
-        <meta charset="UTF-8">
-        <title>Utilizadores</title>
-        <link rel="stylesheet" href="/styles/style.css">
-    </head>
+<head>
+    <meta charset="UTF-8">
+    <title>Utilizadores</title>
+    <link rel="stylesheet" href="styles/style.css"/>
+</head>
 <body>
 
-    <div>
-        <div class="utilizador" th:each="utilizador : ${lista}">
-            <span th:text="${utilizador.nome}"> </span>
-            <span th:text="${utilizador.nif}"> </span>
+    <div class="utilizador">
+        <div th:each="utilizador : ${lista}">
+            <span th:text="${utilizador.nome}"></span>
+            <span th:text="${utilizador.nif}"></span>
         </div>
-    </div>
-
-    <div th:if="${lista.size() > 3}">
-        Olá!
     </div>
 
 </body>

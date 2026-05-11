@@ -1,19 +1,21 @@
 <!DOCTYPE html >
 <html xmlns:th="http://www.thymeleaf.org">
-    <head>
+<head>
     <meta charset="UTF-8">
-    <title>Utilizadores</title>
+    <title>Utilizador</title>
 </head>
 <body>
 
     <div>
-        <span class="utilizador" th:text="${utilizador.nome}"> </span>
-        <span class="utilizador" th:text="${utilizador.nif}"> </span>
+        <span th:text="${utilizador.nome}"></span>
+        <span th:text="${utilizador.nif}"></span>
     </div>
-
     <div>
-        <span class="utilizador" th:text="${utilizador2.nome}"> </span>
-        <span class="utilizador" th:text="${utilizador2.nif}"> </span>
+        <span th:text="${utilizador2.nome}"></span>
+        <span th:text="${utilizador2.nif}"></span>
+    </div>
+    <div>
+        <span th:text="${variavelNumerica}"></span>
     </div>
 
 </body>

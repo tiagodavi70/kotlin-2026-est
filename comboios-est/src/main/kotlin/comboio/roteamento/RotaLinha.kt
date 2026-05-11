@@ -9,25 +9,21 @@ import io.ktor.server.routing.get
 import io.ktor.server.routing.post
 import io.ktor.server.routing.put
 import io.ktor.server.routing.routing
-import pt.org.comboio.Utils.DBUtils
+import pt.transporte.comboio.utils.DButils
 import pt.transporte.comboio.linha.ParagemExposed
 import pt.transporte.comboio.linha.ParagemServico
-import pt.transporte.comboio.linha.RegiaoExposed
-import pt.transporte.comboio.linha.RegiaoServico
 
 fun Application.configureLinha() {
 
-    val paragemServico = ParagemServico(DBUtils.database)
-    val regiaoServico = RegiaoServico(DBUtils.database)
+    val paragemServico = ParagemServico(DButils.database)
 
     routing {
         post("/paragem") {
             val params = call.receiveParameters()
             val nome: String? = params["nome"]
             val estacao: Boolean? = params["estacao"]?.toBooleanStrictOrNull()
-            val regiaoId: Int? = params["regiao"]?.toIntOrNull()
-            if (regiaoId != null) {
-                val regiao: RegiaoExposed? = regiaoServico.ler(regiaoId)
+            val regiao: String? = params["regiao"]
+            if (regiao != null && regiao != null) {
 
                 if (nome != null && estacao != null && regiao != null) {
                     val paragem = ParagemExposed(-1, nome, regiao, estacao)
@@ -65,10 +61,9 @@ fun Application.configureLinha() {
             val params = call.receiveParameters()
             val nome: String? = params["nome"]
             val estacao: Boolean? = params["estacao"]?.toBooleanStrictOrNull()
-            val regiaoId: Int? = params["regiao"]?.toIntOrNull()
+            val regiao: String? = params["regiao"]
 
-            if (id != null && regiaoId != null) {
-                val regiao: RegiaoExposed? = regiaoServico.ler(regiaoId)
+            if (id != null && regiao != null) {
 
                 if (nome != null && estacao != null && regiao != null) {
                     val paragem = ParagemExposed(id, nome, regiao, estacao)
@@ -87,35 +82,6 @@ fun Application.configureLinha() {
             if (id != null) {
                 paragemServico.apagar(id)
                 call.respond(HttpStatusCode.OK)
-            } else {
-                call.respond(HttpStatusCode.BadRequest)
-            }
-        }
-
-        post("/regiao") {
-            val params = call.receiveParameters()
-            val nome: String? = params["nome"]
-            val abreviatura: String? = params["abreviatura"]
-            if (nome != null && abreviatura != null) {
-                val regiao = RegiaoExposed(-1, nome, abreviatura)
-                regiaoServico.criar(regiao)
-                call.respond(HttpStatusCode.Created)
-            } else {
-                call.respond(HttpStatusCode.BadRequest)
-            }
-        }
-        get("/regiao") {
-            call.respond(regiaoServico.ler())
-        }
-        get("/regiao/{id}") {
-            val id = call.parameters["id"]?.toIntOrNull()
-            if (id != null) {
-                val regiao = regiaoServico.ler(id)
-                if (regiao != null) {
-                    call.respond(regiao)
-                } else {
-                    call.respond(HttpStatusCode.BadRequest)
-                }
             } else {
                 call.respond(HttpStatusCode.BadRequest)
             }

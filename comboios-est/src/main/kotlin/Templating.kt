@@ -1,4 +1,4 @@
-package pt.org
+package pt.transporte
 
 import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.*

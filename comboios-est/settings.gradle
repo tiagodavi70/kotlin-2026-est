@@ -1,4 +1,4 @@
-rootProject.name = "comboios-est"
+rootProject.name = "comboio"
 
 dependencyResolutionManagement {
     repositories {
