@@ -1,0 +1,22 @@
+<!DOCTYPE html >
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Cadastrar novo Utilizador</title>
+</head>
+<body>
+
+    <div>
+        <form action="/utilizador" method="post">
+            <label for="nome"> Nome: </label>
+            <input id="nome" name="nome" type="text" placeholder="Entra com o nome">
+
+            <label for="nif"> Nif: </label>
+            <input id="nif" name="nif" type="text" placeholder="Entra com o nif">
+
+            <button type="submit">Enviar</button>
+        </form>
+    </div>
+</body>
+</html>
+

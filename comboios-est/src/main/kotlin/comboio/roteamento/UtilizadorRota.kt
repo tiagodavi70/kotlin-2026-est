@@ -7,17 +7,16 @@ import io.ktor.server.response.respond
 import io.ktor.server.response.respondText
 import io.ktor.server.routing.delete
 import io.ktor.server.routing.get
-import io.ktor.server.routing.param
 import io.ktor.server.routing.post
 import io.ktor.server.routing.put
 import io.ktor.server.routing.routing
-import pt.org.comboio.pessoa.Utilizador
+import pt.org.comboio.pessoa.UtilizadorExposed
 
 fun Application.configureUtilizadorAula() {
-    val utilizadores = listOf<Utilizador>(
-        Utilizador("Tiago", "989898989"),
-        Utilizador("Davi", "989898989"),
-        Utilizador("Alexandre", "989898989")
+    val utilizadores = listOf<UtilizadorExposed>(
+        UtilizadorExposed("Tiago", "989898989"),
+        UtilizadorExposed("Davi", "989898989"),
+        UtilizadorExposed("Alexandre", "989898989")
     )
 
     routing {
@@ -28,8 +27,8 @@ fun Application.configureUtilizadorAula() {
             val nif: String? = parameters["nif"]
 
             if (nome != null && nif != null) {
-                val utilizador = Utilizador(nome, nif)
-                call.respondText(utilizador.toString())
+                val utilizadorExposed = UtilizadorExposed(nome, nif)
+                call.respondText(utilizadorExposed.toString())
             } else {
                 call.respond(HttpStatusCode.BadRequest, "")
             }
@@ -41,8 +40,8 @@ fun Application.configureUtilizadorAula() {
             val nif: String? = parametros["nif"]
 
             if (nome != null && nif != null) {
-                val utilizador = Utilizador(nome, nif)
-                println(utilizador)
+                val utilizadorExposed = UtilizadorExposed(nome, nif)
+                println(utilizadorExposed)
                 call.respond(HttpStatusCode.Created, nome)
             } else {
                 call.respond(HttpStatusCode.BadRequest)
@@ -68,10 +67,10 @@ fun Application.configureUtilizadorAula() {
 }
 
 fun Application.configureUtilizador() {
-    val utilizadores = mutableListOf<Utilizador>(
-        Utilizador("Tiago", "989898989"),
-        Utilizador("Davi", "989898989"),
-        Utilizador("Alexandre", "989898989")
+    val utilizadores = mutableListOf<UtilizadorExposed>(
+        UtilizadorExposed("Tiago", "989898989"),
+        UtilizadorExposed("Davi", "989898989"),
+        UtilizadorExposed("Alexandre", "989898989")
     )
 
     routing {
@@ -81,8 +80,8 @@ fun Application.configureUtilizador() {
             val nif: String? = parametros["nif"]
 
             if (nome != null && nif != null) {
-                val utilizador = Utilizador(nome, nif)
-                utilizadores.add(utilizador)
+                val utilizadorExposed = UtilizadorExposed(nome, nif)
+                utilizadores.add(utilizadorExposed)
                 call.respond(HttpStatusCode.Created, nome)
             } else {
                 call.respond(HttpStatusCode.BadRequest)
@@ -120,8 +119,8 @@ fun Application.configureUtilizador() {
             val indice: Int? = call.parameters["indice"]?.toIntOrNull()
 
             if (nome != null && nif != null && indice != null && indice in 0..<utilizadores.size) {
-                val utilizador = Utilizador(nome, nif)
-                utilizadores[indice] = utilizador
+                val utilizadorExposed = UtilizadorExposed(nome, nif)
+                utilizadores[indice] = utilizadorExposed
                 call.respond(HttpStatusCode.Created, nome)
             } else {
                 call.respond(HttpStatusCode.BadRequest)
