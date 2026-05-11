@@ -18,8 +18,8 @@ import java.time.LocalTime
 
 fun Application.configurePessoa() {
 
-    val utilizador1 = PessoaExposed("Tiago", "999999")
-    val utilizador2 = PessoaExposed("Izabella", "888888")
+    val utilizador1 = PessoaExposed("Tiago", "123456789")
+    val utilizador2 = PessoaExposed("Izabella", "123456789")
     //val utilizadores = mutableListOf<UtilizadorExposed>(utilizador1, utilizador2)
 
     val pessoaServico = PessoaServico(DButils.database)
